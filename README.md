@@ -1,0 +1,1 @@
+oc patch dc/tutorial-web-app  -n webapp --patch '{"spec":{"template":{"spec":{"containers":[{"env":[{"name":"WALKTHROUGH_LOCATIONS","value":"https://github.com/GuilhermeCamposo/workshop_3scale.git"}]}]}}}}'
