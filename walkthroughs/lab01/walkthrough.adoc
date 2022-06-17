@@ -8,7 +8,7 @@ ifdef::env-github[]
 endif::[]
 
 [id='api-design']
-= Integrator Lab 1 - API Design
+= Lab 1 - API Design
 
 In this lab you will use API Designer to create a simple API definition using the OpenAPI Specification. You will learn how to author and download a standards compliant API Specification using Red Hat's API Designer.
 

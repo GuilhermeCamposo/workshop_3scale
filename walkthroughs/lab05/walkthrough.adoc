@@ -10,7 +10,7 @@ ifdef::env-github[]
 endif::[]
 
 [id='api-security']
-= Integrator Lab 5 - API Developer Portal
+= Lab 5 - API Developer Portal
 
 In this lab you will discover how to customize and configure 3scale's Developer Portal.
 

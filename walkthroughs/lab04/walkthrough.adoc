@@ -10,7 +10,7 @@ ifdef::env-github[]
 endif::[]
 
 [id='api-security']
-= Integrator Lab 4 - API Security
+= Lab 4 - API Security
 
 In this lab you will discover how to set up the widely used OpenID connect pattern for Authentication.
 
