@@ -104,7 +104,7 @@ We now have a working REST mock service listening for requests. We will use an o
 +
 [source,bash,subs="attributes+"]
 ----
-curl https://microcks.{openshift-app-host}/rest/Locations-{user-username}/1.0.0/locations
+curl https://microcks-microcks.{openshift-app-host}/rest/Locations-{user-username}/1.0.0/locations
 ----
 
 . Click the *Run* button.

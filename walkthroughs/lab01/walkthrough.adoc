@@ -60,7 +60,7 @@ Have your instructor check the Kubernetes pod that contains the API Designer app
 [id="editing-apis"]
 == Creating API
 
-You are now in the main screen to edit your APIs. Red Hat API Designer is a graphical, form-based API editor. With API Designr, you don't need master in and out all the details of the *OpenAPI Specification*. It allows you to design beautiful, functionals APIs with zero coding.
+You are now in the main screen to edit your APIs. Red Hat API Designer is a graphical, form-based API editor. With API Designer, you don't need master in and out all the details of the *OpenAPI Specification*. It allows you to design beautiful, functionals APIs with zero coding.
 
 Let's start crafting your API.
 
@@ -95,14 +95,14 @@ image::images/new-design-03.png[design-add-datatype, role="integr8ly-img-respons
 
  ** Choose to create a REST Resource with the Data Type: *No Resource*
 
-+
+{empty} +
 image::images/new-design-04.png[design-JSON-Example, role="integr8ly-img-responsive"]
 image::images/new-design-05.png[design-REST-resource, role="integr8ly-img-responsive"]
 
 . API Designer automatically tries to detect the data types from the provided example.
 +
 image::images/new-design-06.png[design-definition-types, role="integr8ly-img-responsive"]
-+
+{empty} +
 _Time to start creating some paths_.
 
 [type=verification]
@@ -288,6 +288,7 @@ Was the source file created successfully?
 [type=verificationFail]
 Try to redo this section, if any problem persists have your instructor check the Kubernetes pod that contains the API Designer application.
 
+{empty} +
 
 _Congratulations!_ You have created your first API definition based on the OpenAPI Specification  using Red Hat's API Designer. Don't lose track of the file, you will use this definition for your next lab.
 

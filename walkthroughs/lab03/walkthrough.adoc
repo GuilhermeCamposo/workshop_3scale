@@ -156,7 +156,7 @@ image::images/create-new-method.png[create-new-method, role="integr8ly-img-respo
 ** System name: *`locations_all`*
 ** Description: *`Method to return all locations`*
 
-+
+{empty} +
 image::images/new-method-details.png[new-method-details, role="integr8ly-img-responsive"]
 
 . Click on **Create Method**.
@@ -207,7 +207,7 @@ _The default policy in the Policy Chain is APIcast. This is the main policy and 
 . Click the **Add Policy** link to add a new policy to the chain.
 +
 image::images/add-policy.png[add-policy, role="integr8ly-img-responsive"]
-+
+{empty} +
 _Out-of-the-box 3scale includes a set of policies you can use to modify the way your API gateway behaves. For this lab, we will focus on the **Cross Origin Resource Sharing (CORS)** one as we will use it in the consumption lab._
 
 . Click in the **CORS Request Handling** link to add the policy.
@@ -325,7 +325,7 @@ image::images/reqbin-bad-result.png[reqbin-bad-result, role="integr8ly-img-respo
 
 _Congratulations! You have configured 3scale access control layer as a proxy to only allow authenticated calls to your backend API._
 
-* 3scale is also now:
+3scale is also now:
 ** Authenticating (If you test with an incorrect API key it will fail)
 ** Recording calls (Visit the Analytics tab to check who is calling your API).
 

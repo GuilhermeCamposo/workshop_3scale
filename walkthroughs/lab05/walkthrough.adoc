@@ -22,7 +22,7 @@ The focal point of your developers experience is the API developer portal, and t
 
 *Why Red Hat?*
 
-https://www.3scale.net/[Red Hat 3scale API Management] Solution provides a built-in, state-of-the-art CMS portal, making it very easy to create your own branded hub with a custom domain to manage developer interactions, and help increase API adoption.
+https://www.3scale.net/[Red Hat 3scale API Management] Solution provides a built-in CMS portal, making it very easy to create your own branded hub with a custom domain to manage developer interactions, and help increase API adoption.
 
 You can customize the look and feel of the entire Developer Portal to match your own branding. You have complete control over every element of the portal, so you can make it as easy as possible for developers to learn how to use your API.
 
