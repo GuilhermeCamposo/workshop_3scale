@@ -25,7 +25,7 @@ You will need Ansible installed in your workstation to deploy this workshop.
 This workshop was tested specifically on OpenShift 4.10.
 ====
 
-== Running the Playbook
+== Installing the Workshop
 
 === Parameters
 
@@ -37,6 +37,7 @@ This workshop was tested specifically on OpenShift 4.10.
 | num_users    | 8                                                  | Number of participants expected in the workshop. Please, have in mind that the more participants you have, more resources you are going to need from the cluster.
 |=======================
 
+== Running the Playbook
 ----
 # Set the environment variables
 token=REPLACE_ME
@@ -44,7 +45,7 @@ server=REPLACE_ME
 num_users=REPLACE_ME
 
 # Run the playbook
-ansible-playbook -e token=${token} -e server=${server}  -e num_users=${num_users} playbook.yml
+ansible-playbook -e token=${token} -e server=${server} -e num_users=${num_users} playbook.yml
 ----
 
 

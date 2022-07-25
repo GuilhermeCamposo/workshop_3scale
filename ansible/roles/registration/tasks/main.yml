@@ -10,3 +10,15 @@
     state: present
     namespace: '{{ registration_namespace }}'
     resource_definition: "{{ lookup('template', 'user_registration.yaml.j2') }}"
+
+- name: Get User Distribution Route
+  k8s_info:
+    kind: Route
+    name: user-registration
+    namespace: '{{ registration_namespace }}'
+    api_version: route.openshift.io/v1
+  register: user_distribution_route
+
+- name: Set user_distribution_url
+  set_fact:
+    registration_url: "{{ user_distribution_route.resources[0].spec.host }}"

@@ -177,3 +177,12 @@
         microcks_project: "microcks"
         fuse_project: "fuse"
         sso_project: "sso"
+
+    - name: Installation Finished
+      debug:
+        msg:
+          - Installation finished succesfully.
+          - 'User Distribution URL: https://{{ registration_url }} '
+          - 'The password for every user is: {{ ocp4_workload_dil_agile_integration_user_access_token }} '
+          - 'User Distribution ADMIN URL: https://{{ registration_url }}/admin '
+          - 'Admin password: {{ workshop_admin_password }} '
