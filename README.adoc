@@ -1,6 +1,6 @@
 = 3scale Workshop
 
-This is a subset of the content present in the [DIL-Agile-Integration](https://github.com/RedHat-Middleware-Workshops/dayinthelife-integration), focused on 3sale.
+This is a subset of the content present in the https://github.com/RedHat-Middleware-Workshops/dayinthelife-integration[DIL-Agile-Integration], focused on 3sale.
 In this repository you will find the workshop content and how to install it in OpenShift.
 
 == Required Resources
