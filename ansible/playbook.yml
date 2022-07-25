@@ -1,0 +1,179 @@
+- hosts: localhost
+  name: Install Fuse Workshop
+  vars:
+    # generic
+    become_override: no
+    ocp_username: opentlc-mgr
+    silent: false
+    insecure_skip_tls_verify: true
+
+    ocp4_workload_dil_agile_integration_num_users: 2
+    num_users: '{{ocp4_workload_dil_agile_integration_num_users|int}}'
+
+    ocp4_workload_dil_agile_integration_num_supported_users: 200
+    num_supported_users: '{{ocp4_workload_dil_agile_integration_num_supported_users|int}}'
+
+    # role
+    ocp4_workload_dil_agile_integration_openshift_user_password: 'openshift'
+    ocp4_workload_dil_agile_integration_ocs_storage_namespace: 'openshift-storage'
+    ocp4_workload_dil_agile_integration_ocs_group_name: cluster-admins
+
+    ocp4_workload_dil_agile_integration_system_storage_size: '100Mi'
+
+    # 3scale oauthclient
+    ocp4_workload_dil_agile_integration_oauthclient_secret: '3scaleclientsecret'
+
+    #  user_registration
+    ocp4_workload_dil_agile_integration_lab_title: "Day In the Life - Agile Integration"
+    ocp4_workload_dil_agile_integration_username_prefix: "user"
+    ocp4_workload_dil_agile_integration_user_access_token: "iotman"
+    workshop_admin_password: admin123
+
+    # provision_webapp
+    ocp4_workload_dil_agile_integration_webapp_operator_release_tag: '0.0.63-workshop-1'
+    ocp4_workload_dil_agile_integration_webapp_client_id: tutorial-web-app
+    ocp4_workload_dil_agile_integration_webapp_group_name: dedicated-admins
+    ocp4_workload_dil_agile_integration_webapp_operator_template_path: /home/tutorial-web-app-operator/deploy/template/tutorial-web-app.yml
+    ocp4_workload_dil_agile_integration_webapp_operator_resources: 'https://github.com/hguerrero/tutorial-web-app-operator/archive/v{{ocp4_workload_dil_agile_integration_webapp_operator_release_tag}}.zip'
+    ocp4_workload_dil_agile_integration_webapp_operator_resource_items:
+      - rbac.yaml
+      - sa.yaml
+      - crd.yaml
+      - operator.yaml
+    ocp4_workload_dil_agile_integration_webapp_walkthrough_locations: 'https://github.com/GuilhermeCamposo/workshop_3scale.git'
+    snapshot_operator_project: "openshift-marketplace"
+  tasks:
+
+    - name: Check Required Parameters
+      fail: msg="This play requires 'server','token' and 'num_users' to be defined"
+      when:
+        - server is not defined
+        - token is not defined
+        - num_users is not defined
+        - num_users | int > 0
+
+    - name: Log in as super user with token on OpenShift 4
+      command: "oc login --token={{ token }}  --server={{ server }} --insecure-skip-tls-verify={{ insecure_skip_tls_verify }}"
+      when:
+       - token is defined
+       - token is not none
+       - token|trim() != ""
+      ignore_errors: no
+
+    - name: usercount debug
+      debug:
+        msg: "Debugging num_users {{ num_users }}"
+
+    - name: create usernames
+      set_fact:
+        users: "{{ users | default([]) + ['user'+item | string] }}"
+      loop: "{{ range(1,((num_users | int) + 1)) | list }}"
+
+    # Figure out paths
+    - name: Get openshift console
+      k8s_info:
+        kind: Route
+        name: console
+        namespace: openshift-console
+        api_version: route.openshift.io/v1
+      register: openshift_console_route
+
+    - name: Set openshift console
+      set_fact:
+        console_url: "https://{{ openshift_console_route.resources[0].status.ingress[0].host }}"
+
+    - name: Get ingress domain
+      k8s_info:
+        kind: IngressController
+        name: default
+        namespace: openshift-ingress-operator
+        api_version: operator.openshift.io/v1
+      register: openshift_ingress_controller
+
+    - name: Set openshift domain
+      set_fact:
+        route_subdomain: "{{ openshift_ingress_controller.resources[0].status.domain }}"
+
+    - name: debug values
+      debug:
+        msg:
+        - "console URL: {{ console_url }}"
+        - "route subdomain: {{ route_subdomain }}"
+        - "ocp_username: {{ ocp_username }}"
+
+    - name: Include Snapshot Operator
+      include_role:
+        name: snapshot
+
+    - name: Provision AMQ Streams
+      include_role:
+        name: streams
+      vars:
+        operators_project: "openshift-operators"
+
+    - name: Provision User Registration
+      include_role:
+        name: registration
+      vars:
+        registration_namespace: "registration"
+
+    - name: Provision OpenShift Container Storage
+      include_role:
+        name: ocs
+      vars:
+        ocs_project: "{{ ocp4_workload_dil_agile_integration_ocs_storage_namespace }}"
+        snapshot_operator_project: "openshift-marketplace"
+
+    - name: Provision 3scale
+      include_role:
+        name: threescale
+      vars:
+        ocs_project: "{{ ocp4_workload_dil_agile_integration_ocs_storage_namespace }}"
+        threescale_project: "threescale"
+
+    - name: Provision SSO
+      include_role:
+        name: sso
+      vars:
+        sso_project: "sso"
+
+    - name: Provision Apicurito
+      include_role:
+        name: apicurito
+      vars:
+        apicurito_project: "apicurito"
+
+    - name: Provision Microcks
+      include_role:
+        name: microcks
+      vars:
+        microcks_project: "microcks"
+
+    - name: Provision Backend Project
+      include_role:
+        name: backend
+      vars:
+        backend_project: "international"
+        sso_project: "sso"
+
+    - name: Provision User Namespaces
+      include_role:
+        name: users
+      loop: "{{ range(1, num_users|int + 1, 1)|list }}"
+      when:
+        - num_users|int > 0
+      vars:
+        shared_namespace: "shared"
+        sso_project: "sso"
+        fuse_project: "fuse"
+
+    - name: Provision Solution Explorer
+      include_role:
+        name: solution-explorer
+      vars:
+        webapp_namespace: "webapp"
+        configmap_name: "extra-services"
+        apicurito_project: "apicurito"
+        microcks_project: "microcks"
+        fuse_project: "fuse"
+        sso_project: "sso"

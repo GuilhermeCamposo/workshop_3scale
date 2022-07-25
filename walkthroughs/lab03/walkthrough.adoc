@@ -157,6 +157,7 @@ image::images/create-new-method.png[create-new-method, role="integr8ly-img-respo
 ** Description: *`Method to return all locations`*
 
 {empty} +
+
 image::images/new-method-details.png[new-method-details, role="integr8ly-img-responsive"]
 
 . Click on **Create Method**.

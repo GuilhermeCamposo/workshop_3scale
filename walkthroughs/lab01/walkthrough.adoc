@@ -96,12 +96,16 @@ image::images/new-design-03.png[design-add-datatype, role="integr8ly-img-respons
  ** Choose to create a REST Resource with the Data Type: *No Resource*
 
 {empty} +
+
 image::images/new-design-04.png[design-JSON-Example, role="integr8ly-img-responsive"]
+
 image::images/new-design-05.png[design-REST-resource, role="integr8ly-img-responsive"]
 
 . API Designer automatically tries to detect the data types from the provided example.
-+
+{empty} +
+
 image::images/new-design-06.png[design-definition-types, role="integr8ly-img-responsive"]
+
 {empty} +
 _Time to start creating some paths_.
 
@@ -204,7 +208,8 @@ image::images/new-design-15.png[design-add-example, role="integr8ly-img-responsi
   ]
 ----
 
-+
+{empty} +
+
 image::images/new-design-16.png[design-response-example, role="integr8ly-img-responsive"]
 . Click on edit button for _Description_ message, and enter `Returns an array of location records` as the description.  Click the check-mark button to accept the description.
 +
@@ -314,7 +319,6 @@ You can now proceed to `Lab 2`.
 ** https://access.redhat.com/documentation/en-us/red_hat_integration/2020-q2/html/getting_started_with_apis_in_red_hat_integration/index[API Designer]
 * Apicurio
  ** https://www.apicur.io[Webpage]
- ** https://www.apicur.io/roadmap/[Roadmap]
 * OpenAPI
  ** https://www.openapis.org/[OpenAPI Initiative]
  ** https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md[OpenAPI Specification 3.0.2]
