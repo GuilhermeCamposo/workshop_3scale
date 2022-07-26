@@ -143,6 +143,9 @@
         backend_project: "international"
         sso_project: "sso"
 
+    - name: Import Deprecated Nodejs:12 Image
+      command: oc import-image nodejs-12:1-114 --from=registry.redhat.io/rhel8/nodejs-12:1-114 --confirm -n openshift
+
     - name: Provision User Namespaces
       include_role:
         name: users
@@ -172,4 +175,4 @@
           - 'Registration Page: https://{{ registration_url }} '
           - 'Users` Password: {{ ocp4_workload_dil_agile_integration_user_access_token }} '
           - 'Registration Page for Admins: https://{{ registration_url }}/admin '
-          - 'Admin password: {{ workshop_admin_password }} '
+          - 'Admin Password: {{ workshop_admin_password }} '

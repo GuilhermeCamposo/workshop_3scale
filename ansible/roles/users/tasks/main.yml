@@ -27,9 +27,6 @@
   loop_control:
     loop_var: item_project
 
-- name: Import Deprecated Nodejs:12 Image
-  command: oc import-image nodejs-12:1-114 --from=registry.redhat.io/rhel8/nodejs-12:1-114 --confirm -n openshift
-
 - name: Create Webpage application for each user
   command: >-
     oc new-app  -n user{{ item }}
@@ -65,4 +62,4 @@
   include_role:
     name: apicast
   vars:
-    namespace: 'user{{ item }}'       
+    namespace: 'user{{ item }}'
