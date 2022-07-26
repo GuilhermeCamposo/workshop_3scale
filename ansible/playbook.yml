@@ -26,7 +26,7 @@
     #  user_registration
     ocp4_workload_dil_agile_integration_lab_title: "Day In the Life - Agile Integration"
     ocp4_workload_dil_agile_integration_username_prefix: "user"
-    ocp4_workload_dil_agile_integration_user_access_token: "iotman"
+    ocp4_workload_dil_agile_integration_user_access_token: "3scale"
     workshop_admin_password: admin123
 
     # provision_webapp
@@ -97,12 +97,6 @@
     - name: Include Snapshot Operator
       include_role:
         name: snapshot
-
-    # - name: Provision AMQ Streams
-    #   include_role:
-    #     name: streams
-    #   vars:
-    #     operators_project: "openshift-operators"
 
     - name: Provision User Registration
       include_role:
@@ -175,7 +169,7 @@
       debug:
         msg:
           - Installation finished succesfully.
-          - 'User Distribution URL: https://{{ registration_url }} '
-          - 'The password for every user is: {{ ocp4_workload_dil_agile_integration_user_access_token }} '
-          - 'User Distribution ADMIN URL: https://{{ registration_url }}/admin '
+          - 'Registration Page: https://{{ registration_url }} '
+          - 'Users` Password: {{ ocp4_workload_dil_agile_integration_user_access_token }} '
+          - 'Registration Page for Admins: https://{{ registration_url }}/admin '
           - 'Admin password: {{ workshop_admin_password }} '
