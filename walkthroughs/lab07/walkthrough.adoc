@@ -48,11 +48,15 @@ Before deploying the gateway we need to create a `Secret` with the 3scale server
 * Go to link:{3scale-admin-url}[3scale Admin Console, window="_blank"]
 * On the top dropdown menu, select `Account Settings`
 
+{empty} +
+
 image::images/account-settings.png[Account Setting Menu, role="integr8ly-img-responsive"]
 
 {empty} +
 
 * In the overview page you will see a `Provider Key`, a token that we'll use to allow the gateway to get information from the 3scale server.
+
+{empty} +
 
 image::images/provider-key.png[Account Setting Overview, role="integr8ly-img-responsive"]
 
@@ -76,7 +80,7 @@ Now that you have the `Provider Key`, let's create a secret with the portal acce
 {empty} +
 
 image::images/secrets.png[Secrets Overview, role="integr8ly-img-responsive"]
-
+{empty} +
 
 * Click on `create` and then select `key/value secret`
 
@@ -94,8 +98,9 @@ image::images/key-value.png[Secrets Overview, role="integr8ly-img-responsive"]
 {empty} +
 
 image::images/secret-values.png[Secrets Overview, role="integr8ly-img-responsive"]
+{empty} +
 
-* After adding the values, click on create.
+* After adding the values, click on `create`.
 
 [type=verification]
 Did you create the secret?
@@ -221,6 +226,8 @@ image::images/self-managed.png[Gateway Settings, role="integr8ly-img-responsive"
 
 * Scroll down to the end of the page and click on `Update Product`
 
+{empty} +
+
 Now that you have your gateway configured you must promote your configuration.
 
 * Go to `Integration > Configuration` and click on `Promote v.1 to Staging`:
@@ -256,4 +263,4 @@ Did you get a response like in the example?
 
 We reached the end of our workshop. It was a pleasure to have you with us. This was just a taste of what 3scale can do. We hope that this content will get you started on our API Management tool.
 
-See you soon! 
+See you soon!
