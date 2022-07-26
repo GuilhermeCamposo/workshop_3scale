@@ -1,5 +1,6 @@
 :walkthrough: Deploying APIcast Using the Operator
 :3scale-admin-url: https://{user-username}-admin.{openshift-app-host}/p/login
+:3scale-portal-url: {user-username}-admin.{openshift-app-host}
 :3scale-gateway: stg-{user-username}.{openshift-app-host}
 :openshift-url: {openshift-host}
 :user-password: openshift
@@ -47,15 +48,15 @@ Before deploying the gateway we need to create a `Secret` with the 3scale server
 * Go to link:{3scale-admin-url}[3scale Admin Console, window="_blank"]
 * On the top dropdown menu, select `Account Settings`
 
-{empty} +
-
 image::images/account-settings.png[Account Setting Menu, role="integr8ly-img-responsive"]
+
+{empty} +
 
 * In the overview page you will see a `Provider Key`, a token that we'll use to allow the gateway to get information from the 3scale server.
 
-{empty} +
-
 image::images/provider-key.png[Account Setting Overview, role="integr8ly-img-responsive"]
+
+{empty} +
 
 * Take note of the key value. We will need it for the next section.
 
@@ -83,10 +84,14 @@ image::images/secrets.png[Secrets Overview, role="integr8ly-img-responsive"]
 
 image::images/key-value.png[Secrets Overview, role="integr8ly-img-responsive"]
 
+{empty} +
+
 * Add the following values:
 ** `secret-name`: *gateway-secret*
 ** `key`: *AdminPortalURL*
-** `value`: it's *https://* + *provider-key* + *@* + *{3scale-admin-url}*
+** `value`: it's *https://* + *provider-key* + *@* + *{3scale-portal-url}*
+
+{empty} +
 
 image::images/secret-values.png[Secrets Overview, role="integr8ly-img-responsive"]
 
@@ -110,9 +115,15 @@ We are going to use it as our test API.
 
 image::images/product-view.png[Products, role="integr8ly-img-responsive"]
 
+{empty} +
+
 * In the overview page, under `Configuration, Methods and Settings` you'll find the service `name` and `id`.
 
+{empty} +
+
 image::images/id-api-call.png[Id API Call, role="integr8ly-img-responsive"]
+
+{empty} +
 
 [type=verification]
 Did you find the ID?
@@ -128,13 +139,19 @@ Custom Resources(CR). Let's create an APIcast definition to deploy the 3scale ga
 * On the Developer view, click on `Add`.
 * Select `Operator Backed`.
 
+{empty} +
+
 image::images/add-operator.png[Operator Backed, role="integr8ly-img-responsive"]
+
+{empty} +
 
 * You may use the search filter to find the `APIcast Operator`
 
 {empty} +
 
 image::images/add-apicast.png[Operator Backed, role="integr8ly-img-responsive"]
+
+{empty} +
 
 * After selecting APIcast, click on `create`
 * In the CR page, select "YAML view"
@@ -143,7 +160,11 @@ image::images/add-apicast.png[Operator Backed, role="integr8ly-img-responsive"]
 
 image::images/yaml-view.png[Yaml View, role="integr8ly-img-responsive"]
 
+{empty} +
+
 * Paste the following definition in the YAML input field:
+
+{empty} +
 
 [source,yaml,subs="attributes+", id="apicast-cr"]
 ----
@@ -166,6 +187,8 @@ spec:
   logLevel: debug
   replicas: 1
 ----
+
+{empty} +
 
 * Click on `Create`
 * After the deployment in done you should be able to visualize the gateway pod and it's route
@@ -194,4 +217,43 @@ Before testing our gateway deployment we need to configure our API to exposed by
 
 image::images/self-managed.png[Gateway Settings, role="integr8ly-img-responsive"]
 
+{empty} +
+
 * Scroll down to the end of the page and click on `Update Product`
+
+Now that you have your gateway configured you must promote your configuration.
+
+* Go to `Integration > Configuration` and click on `Promote v.1 to Staging`:
+
+{empty} +
+
+image::images/promote-staging.png[Promote, role="integr8ly-img-responsive"]
+
+{empty} +
+
+* Once you click it that will generate a test call using one application `user_key`. Copy only the address in the cURL command:
+
+{empty} +
+
+image::images/testing.png[Testing, role="integr8ly-img-responsive"]
+
+{empty} +
+
+* Instead of using cURL, paste that URL on your browser. You should get a response like this:
+
+{empty} +
+
+image::images/test-result.png[Result, role="integr8ly-img-responsive"]
+
+{empty} +
+
+[type=verification]
+Did you get a response like in the example?
+
+[time=1]
+[id="summary"]
+== Summary
+
+We reached the end of our workshop. It was a pleasure to have you with us. This was just a taste of what 3scale can do. We hope that this content will get you started on our API Management tool.
+
+See you soon! 
