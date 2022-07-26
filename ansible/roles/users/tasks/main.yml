@@ -1,4 +1,3 @@
----
 - name: Process user namespace
   k8s:
     api_version: v1
@@ -47,3 +46,23 @@
   command: oc expose svc/www -n user{{ item }}
   register: create_webapp_route
   failed_when: create_webapp_route.stderr != '' and 'already exists' not in create_webapp_route.stderr
+
+
+- name: Evaluate APIcast Subscription
+  k8s:
+    state: present
+    kind: OperatorGroup
+    api_version: operators.coreos.com/v1
+    namespace: 'user{{ item }}'
+    definition:
+      metadata:
+        name: user1-group
+      spec:
+        targetNamespaces:
+        - 'user{{ item }}'
+
+- name: Include APIcast
+  include_role:
+    name: apicast
+  vars:
+    namespace: 'user{{ item }}'       

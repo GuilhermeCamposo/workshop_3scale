@@ -1,8 +1,6 @@
-:walkthrough: Testing the International Inc. Locations page using our newly authenticated locations API
-:3scale-url: https://www.3scale.net/
+:walkthrough: Deploying APIcast Using the Operator
 :3scale-admin-url: https://{user-username}-admin.{openshift-app-host}/p/login
-:3scale-dev-portal-url: https://{user-username}.{openshift-app-host}/
-:sso-url: https://keycloak-sso.{openshift-app-host}/auth/admin/{user-username}-realm/console
+:3scale-gateway: stg-{user-username}.{openshift-app-host}
 :openshift-url: {openshift-host}
 :user-password: openshift
 
@@ -10,19 +8,18 @@ ifdef::env-github[]
 endif::[]
 
 [id='testing-web-app']
-= Lab 7 - Deploying Apicast Using the Operator
+= Lab 7 - Deploying APIcast Using the Operator
 
-Learn how to deploy a self managed instance of Apicast.
+Learn how to deploy a self-managed instance of APIcast.
 
 Audience:  Developers, Architects and Operations team
 
 *Overview*
 
+3scale has a distributed architecture that separates the server and the component responsible for handling applications request, the gateway.
+Thanks to this design approach, we can deploy the gateway near to the applications and backends, reducing request latency  and  providing scalability, which will increase the overall API performance
 
-
-*Why Red Hat?*
-
-Applications can be built from many technologies. In this case we use a simple web application, but a wide range of Red Hat and non-Red Hat technologies could be used.
+There are different ways to deploy the gateway, but today you will learn how to deploy the gateway on OpenShift using the APIcast Operator.
 
 *Credentials:*
 
@@ -36,30 +33,165 @@ Your password is: `{user-password}`
 ****
 
 [type=walkthroughResource]
-.Red Hat SSO Console
+.3scale Admin Console
 ****
-* link:{sso-url}[Console, window="_blank"]
+* link:{3scale-admin-url}[Console, window="_blank"]
 ****
 
-[time=5]
-[id="update-openshift"]
-== TBD
+[time=3]
+[id="provider-key"]
+== Getting the Provider Key
+
+Before deploying the gateway we need to create a `Secret` with the 3scale server access information.
+
+* Go to link:{3scale-admin-url}[3scale Admin Console, window="_blank"]
+* On the top dropdown menu, select `Account Settings`
+
+{empty} +
+
+image::images/account-settings.png[Account Setting Menu, role="integr8ly-img-responsive"]
+
+* In the overview page you will see a `Provider Key`, a token that we'll use to allow the gateway to get information from the 3scale server.
+
+{empty} +
+
+image::images/provider-key.png[Account Setting Overview, role="integr8ly-img-responsive"]
+
+* Take note of the key value. We will need it for the next section.
+
+[type=verification]
+Did you get the Provider Key?
 
 
+[time=3]
+[id="secret"]
+== Creating the Credentials Secret
+
+Now that you have the `Provider Key`, let's create a secret with the portal access information.
+
+* Go to link:{openshift-url}[OpenShift Console, window="_blank"].
+* On the Developer view, click on `Secret`.
+
+{empty} +
+
+image::images/secrets.png[Secrets Overview, role="integr8ly-img-responsive"]
+
+
+* Click on `create` and then select `key/value secret`
+
+{empty} +
+
+image::images/key-value.png[Secrets Overview, role="integr8ly-img-responsive"]
+
+* Add the following values:
+** `secret-name`: *gateway-secret*
+** `key`: *AdminPortalURL*
+** `value`: it's *https://* + *provider-key* + *@* + *{3scale-admin-url}*
+
+image::images/secret-values.png[Secrets Overview, role="integr8ly-img-responsive"]
+
+* After adding the values, click on create.
+
+[type=verification]
+Did you create the secret?
+
+[time=3]
+[id="secret"]
+== Exposing ECHO API
+
+Echo API is a 3scale cloud hosted API that comes pre-configured with 3scale to demonstrate how to perform basic configuration.
+We are going to use it as our test API.
+
+* Go to link:{3scale-admin-url}[3scale Admin Console, window="_blank"]
+* On the top dropdrown menu, select `Products`
+* In the products list, select `API`
+
+{empty} +
+
+image::images/product-view.png[Products, role="integr8ly-img-responsive"]
+
+* In the overview page, under `Configuration, Methods and Settings` you'll find the service `name` and `id`.
+
+image::images/id-api-call.png[Id API Call, role="integr8ly-img-responsive"]
+
+[type=verification]
+Did you find the ID?
+
+[time=3]
+[id="cr"]
+== Deploying the APIcast CR
+
+Operators use Custom Resources Definitions(CRD) to create manifest files that describe a particular service or deployment definition,
+Custom Resources(CR). Let's create an APIcast definition to deploy the 3scale gateway in your own user namespace.
+
+* Go to link:{openshift-url}[OpenShift Console, window="_blank"].
+* On the Developer view, click on `Add`.
+* Select `Operator Backed`.
+
+image::images/add-operator.png[Operator Backed, role="integr8ly-img-responsive"]
+
+* You may use the search filter to find the `APIcast Operator`
+
+{empty} +
+
+image::images/add-apicast.png[Operator Backed, role="integr8ly-img-responsive"]
+
+* After selecting APIcast, click on `create`
+* In the CR page, select "YAML view"
+
+{empty} +
+
+image::images/yaml-view.png[Yaml View, role="integr8ly-img-responsive"]
+
+* Paste the following definition in the YAML input field:
+
+[source,yaml,subs="attributes+", id="apicast-cr"]
 ----
-token=b8720a280c971656b07b474a84555214d8dcbc2b2ec80c09cd8c84e4269f7809
-threescale_url=user1-admin.apps.cluster-qsfdq.qsfdq.sandbox1327.opentlc.com
-
-oc create secret generic gateway-secret --from-literal=AdminPortalURL=https://$token@$threescale_url
-
-https://05f8d3f71b76c5c95b8d05c24e8bca8a@user1-admin.apps.cluster-qsfdq.qsfdq.sandbox1327.opentlc.com/
-----
-
-
+kind: APIcast
+apiVersion: apps.3scale.net/v1alpha1
+metadata:
+  name: stg-apicast
+  namespace: {user-username}
+spec:
   adminPortalCredentialsRef:
     name: gateway-secret
-  deploymentEnvironment: Production
+  configurationLoadMode: lazy
+  deploymentEnvironment: staging
+  enabledServices:
+    - '3'
   exposedHost:
-    host: prod-user1.apps.cluster-qsfdq.qsfdq.sandbox1327.opentlc.com
+    host: {3scale-gateway}
+    tls:
+    - {}
   logLevel: debug
   replicas: 1
+----
+
+* Click on `Create`
+* After the deployment in done you should be able to visualize the gateway pod and it's route
+
+{empty} +
+
+image::images/apicast-pod.png[Gateway Pod, role="integr8ly-img-responsive"]
+
+[type=verification]
+Did you deploy the gateway successfully?
+
+[time=5]
+[id="config-test"]
+== Configuring the API and Testing
+
+Before testing our gateway deployment we need to configure our API to exposed by the self-managed gateway.
+
+* Go to link:{3scale-admin-url}[3scale Admin Console, window="_blank"]
+* On the top dropdrown menu, select `Products`
+* In the products list, select `API`
+* In the `Integration` category, click on `Settings`
+* Under `Deployments`, select `APIcast self-managed`
+* Enter {3scale-gateway} as the `Staging Public Base URL`
+
+{empty} +
+
+image::images/self-managed.png[Gateway Settings, role="integr8ly-img-responsive"]
+
+* Scroll down to the end of the page and click on `Update Product`

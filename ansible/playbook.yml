@@ -94,22 +94,15 @@
       set_fact:
         route_subdomain: "{{ openshift_ingress_controller.resources[0].status.domain }}"
 
-    - name: debug values
-      debug:
-        msg:
-        - "console URL: {{ console_url }}"
-        - "route subdomain: {{ route_subdomain }}"
-        - "ocp_username: {{ ocp_username }}"
-
     - name: Include Snapshot Operator
       include_role:
         name: snapshot
 
-    - name: Provision AMQ Streams
-      include_role:
-        name: streams
-      vars:
-        operators_project: "openshift-operators"
+    # - name: Provision AMQ Streams
+    #   include_role:
+    #     name: streams
+    #   vars:
+    #     operators_project: "openshift-operators"
 
     - name: Provision User Registration
       include_role:

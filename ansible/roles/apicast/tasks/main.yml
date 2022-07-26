@@ -1,0 +1,30 @@
+- name: Evaluate APIcast Subscription
+  k8s:
+    state: present
+    kind: Subscription
+    api_version: operators.coreos.com/v1alpha1
+    namespace: '{{ namespace }}'
+    definition:
+      metadata:
+        name: apicast-operator
+      spec:
+        channel: threescale-2.11
+        installPlanApproval: Automatic
+        name: apicast-operator
+        source: redhat-operators
+        sourceNamespace: openshift-marketplace
+
+- name: Wait APIcast Operator to be Running
+  k8s_info:
+    api_version: v1
+    kind: Pod
+    namespace: '{{ namespace }}'
+    label_selectors:
+      - app = apicast
+      - control-plane = controller-manager
+    field_selectors:
+      - status.phase=Running
+  register: r_apicast_operator_pod
+  retries: 120
+  delay: 10
+  until: r_apicast_operator_pod.resources | list | length == 1
