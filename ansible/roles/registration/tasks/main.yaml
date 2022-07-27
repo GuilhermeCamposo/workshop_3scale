@@ -1,0 +1,60 @@
+- name: Evaluate {{ solution_explorer_namespace }} project
+  when: participants | int > 0
+  k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    api_version: v1
+    kind: Namespace
+    name: '{{ solution_explorer_namespace }}'
+
+- name: Evaluate Redis
+  k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    state: present
+    namespace: '{{ solution_explorer_namespace }}'
+    resource_definition: "{{ lookup('file', 'redis-list.yaml') }}"
+
+- name: Wait for redis to be ready
+  k8s_info:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    api_version: v1
+    kind: Pod
+    namespace: '{{ solution_explorer_namespace }}'
+    label_selectors:
+      - name = redis
+      - deploymentconfig = redis
+    field_selectors:
+      - status.phase=Running
+  register: r_redis_pod
+  retries: 120
+  delay: 10
+  until: r_redis_pod.resources | list | length == 1
+
+- name: Evaluate username-distribution
+  k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    state: present
+    namespace: '{{ solution_explorer_namespace }}'
+    resource_definition: "{{ lookup('template', 'username-distribution-list.yaml.j2') }}"
+
+- name: Get Registration Route
+  k8s_info:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    kind: Route
+    name: user-registration
+    namespace: '{{ solution_explorer_namespace }}'
+    api_version: route.openshift.io/v1
+  register: user_distribution_route
+
+- name: Set user_distribution_url
+  set_fact:
+    registration_url: "{{ user_distribution_route.resources[0].spec.host }}"

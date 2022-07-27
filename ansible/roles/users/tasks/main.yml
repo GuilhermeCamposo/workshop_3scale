@@ -1,5 +1,8 @@
 - name: Process user namespace
   k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     api_version: v1
     kind: Namespace
     name: 'user{{ item }}'
@@ -12,12 +15,18 @@
 
 - name: Create Role to access Terminal
   k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     state: present
     resource_definition: "{{ lookup('template', 'pod-exec-role.yaml.j2') }}"
   when: item == "1"
 
 - name: Give user{{ item }} access to projects
   k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     state: present
     resource_definition: "{{ lookup('template', 'user-rolebinding.yaml.j2') }}"
   loop:
@@ -27,6 +36,7 @@
   loop_control:
     loop_var: item_project
 
+#TODO create template for this application
 - name: Create Webpage application for each user
   command: >-
     oc new-app  -n user{{ item }}
@@ -45,8 +55,11 @@
   failed_when: create_webapp_route.stderr != '' and 'already exists' not in create_webapp_route.stderr
 
 
-- name: Evaluate APIcast Subscription
+- name: Evaluate Operator Group
   k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     state: present
     kind: OperatorGroup
     api_version: operators.coreos.com/v1

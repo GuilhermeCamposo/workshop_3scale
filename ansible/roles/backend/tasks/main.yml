@@ -1,12 +1,13 @@
----
-
-- name: Evaluate {{backend_project }} namespace if not exists
+- name: Evaluate {{backend_project }} namespace
   k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     api_version: v1
     kind: Namespace
     name: '{{ backend_project }}'
     state: present
-
+#TODO very which application is actually used in the workshop and create template
 - name: Create S2I templates
   command: >-
     oc apply  -n openshift
@@ -66,6 +67,9 @@
 
 - name: Extract key_cloak_admin_password
   k8s_info:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     kind: Secret
     name: credential-sso
     namespace: '{{ sso_project }}'

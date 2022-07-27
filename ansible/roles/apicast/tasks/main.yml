@@ -1,5 +1,8 @@
 - name: Evaluate APIcast Subscription
   k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     state: present
     kind: Subscription
     api_version: operators.coreos.com/v1alpha1
@@ -16,6 +19,9 @@
 
 - name: Wait APIcast Operator to be Running
   k8s_info:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     api_version: v1
     kind: Pod
     namespace: '{{ namespace }}'

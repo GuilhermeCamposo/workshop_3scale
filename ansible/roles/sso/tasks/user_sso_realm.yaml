@@ -1,9 +1,5 @@
----
-
 - set_fact:
     current_user: 'user{{__user_number}}'
-
-
 
 - name: Create {{ current_user }} Realm
   uri:
