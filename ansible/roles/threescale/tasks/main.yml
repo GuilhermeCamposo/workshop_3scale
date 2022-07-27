@@ -164,6 +164,7 @@
             oauth_server_type: builtin
             client_id: '3scale'
             client_secret: '{{ ocp4_workload_dil_agile_integration_oauthclient_secret }}'
+            
 #TODO verify if this bounce is really needed
 - name: Bounce system-app
   command: "oc rollout latest dc/system-app -n {{ threescale_project }}"
