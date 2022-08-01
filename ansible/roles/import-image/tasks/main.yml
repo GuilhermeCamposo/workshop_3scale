@@ -1,7 +1,12 @@
-#TODO transform this into URI call
-POST https://api.cluster-h5rjq.h5rjq.sandbox915.opentlc.com:6443/apis/image.openshift.io/v1/namespaces/openshift/imagestreamimports
-Request Headers:
- User-Agent: oc/4.9.0 (linux/amd64) kubernetes/96e95ce
- Accept: application/json, */*
- Content-Type: application/json
- Authorization: Bearer <masked>
+- name: Import NodeJs 12
+  uri:
+    url: '{{ server }}/apis/image.openshift.io/v1/namespaces/openshift/imagestreamimports'
+    method: POST
+    body_format: json
+    headers:
+      Content-Type: "application/json"
+      Accept: application/json
+      Authorization: "Bearer {{ token }}"
+    body:  "{{ lookup('file', 'nodejs-is.json') }}"
+    validate_certs: no
+    status_code: 201

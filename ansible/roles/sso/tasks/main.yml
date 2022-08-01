@@ -54,10 +54,6 @@
   retries: 90
   delay: 30
 
-#TODO remove this pause
-- pause:
-    minutes: 2
-
 - name: Retrieve SSO admin credentials
   k8s_info:
     api_key: '{{ token }}'

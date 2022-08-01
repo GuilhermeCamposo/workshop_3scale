@@ -54,9 +54,7 @@
     namespace: '{{ solution_explorer_namespace }}'
     api_version: route.openshift.io/v1
   register: webapp_secure_route
-  until: >-
-    (webapp_secure_route.resources is defined)
-    and (webapp_secure_route.resources|length>0)
+  until: (webapp_secure_route.resources is defined) and (webapp_secure_route.resources|length>0)
   retries: 10
   delay: 30
 

@@ -16,11 +16,6 @@
     state: present
     namespace: '{{ backend_project }}'
     resource_definition: "{{ lookup('template', 'postgres-template.yml') }}"
-    vars:
-      POSTGRESQL_USER: dbuser
-      POSTGRESQL_PASSWORD: password
-      POSTGRESQL_DATABASE: sampledb
-      POSTGRESQL_VERSION: latest
 
 - name: Create Location API service
   k8s:
@@ -29,9 +24,4 @@
     validate_certs: '{{ verify_tls }}'
     state: present
     namespace: '{{ backend_project }}'
-    resource_definition: "{{ lookup('template', 'location-service-temlate.yml') }}"
-    vars:
-      POSTGRESQL_USER: dbuser
-      POSTGRESQL_PASSWORD: password
-      POSTGRESQL_DATABASE: sampledb
-      POSTGRESQL_VERSION: latest
+    resource_definition: "{{ lookup('template', 'location-service-template.yml') }}"

@@ -1,6 +1,9 @@
 ---
 - name: Create secret for user{{item}}
   k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     state: present
     resource_definition: "{{ lookup('template', 'threescale-tenant-password.yaml.j2') }}"
   vars:
@@ -8,6 +11,9 @@
 
 - name: Create tenant user{{item}}
   k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     state: present
     resource_definition: "{{ lookup('template', 'threescale-tenant.yaml.j2') }}"
   vars:
