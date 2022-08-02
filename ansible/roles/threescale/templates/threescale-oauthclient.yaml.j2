@@ -3,7 +3,7 @@ apiVersion: oauth.openshift.io/v1
 metadata:
    name: 3scale
    namespace: default
-secret: '{{ ocp4_workload_dil_agile_integration_oauthclient_secret }}'
+secret: '{{ threescale_oauthclient_secret }}'
 redirectURIs:
    - "https://master.{{ route_subdomain }}/"
 grantMethod: prompt

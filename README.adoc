@@ -3,6 +3,9 @@
 This is a subset of the content present in the https://github.com/RedHat-Middleware-Workshops/dayinthelife-integration[DIL-Agile-Integration], focused on 3sale.
 In this repository you will find the workshop content and how to install it in OpenShift.
 
+image::doc/img/workshop-labs.png[Labs Available]
+
+
 == Required Resources
 
 [NOTE]
