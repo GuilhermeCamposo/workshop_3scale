@@ -20,7 +20,6 @@ You will need Ansible installed in your workstation to deploy this workshop.
 * https://www.ansible.com/[Ansible 3]
 - https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#control-node-requirements[Ansible's requirement]
 * https://pypi.org/project/kubernetes/[Python's Kubernetes module]
-* OpenShift CLI(oc) > 4.10
 * OpenShift Workshop 4.10
 
 [NOTE]
