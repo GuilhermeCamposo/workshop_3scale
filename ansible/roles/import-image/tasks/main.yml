@@ -1,0 +1,12 @@
+- name: Import NodeJs 12
+  uri:
+    url: '{{ server }}/apis/image.openshift.io/v1/namespaces/openshift/imagestreamimports'
+    method: POST
+    body_format: json
+    headers:
+      Content-Type: "application/json"
+      Accept: application/json
+      Authorization: "Bearer {{ token }}"
+    body:  "{{ lookup('file', 'nodejs-is.json') }}"
+    validate_certs: no
+    status_code: 201

@@ -1,17 +1,14 @@
 - hosts: localhost
-  name: Install Fuse Workshop
+  name: Install 3scale Workshop
   vars:
     # generic
     become_override: no
     ocp_username: opentlc-mgr
     silent: false
     insecure_skip_tls_verify: true
+    verify_tls: false
 
-    ocp4_workload_dil_agile_integration_num_users: 2
-    num_users: '{{ocp4_workload_dil_agile_integration_num_users|int}}'
-
-    ocp4_workload_dil_agile_integration_num_supported_users: 200
-    num_supported_users: '{{ocp4_workload_dil_agile_integration_num_supported_users|int}}'
+    participants: '{{ num_users }}'
 
     # role
     ocp4_workload_dil_agile_integration_openshift_user_password: 'openshift'
@@ -23,24 +20,20 @@
     # 3scale oauthclient
     ocp4_workload_dil_agile_integration_oauthclient_secret: '3scaleclientsecret'
 
-    #  user_registration
-    ocp4_workload_dil_agile_integration_lab_title: "Day In the Life - Agile Integration"
-    ocp4_workload_dil_agile_integration_username_prefix: "user"
-    ocp4_workload_dil_agile_integration_user_access_token: "3scale"
+    #  registration
+    workshop_title: "3scale Workshop"
+    workshop_openshift_user_password: "3scale"
     workshop_admin_password: admin123
 
-    # provision_webapp
-    ocp4_workload_dil_agile_integration_webapp_operator_release_tag: '0.0.63-workshop-1'
-    ocp4_workload_dil_agile_integration_webapp_client_id: tutorial-web-app
-    ocp4_workload_dil_agile_integration_webapp_group_name: dedicated-admins
-    ocp4_workload_dil_agile_integration_webapp_operator_template_path: /home/tutorial-web-app-operator/deploy/template/tutorial-web-app.yml
-    ocp4_workload_dil_agile_integration_webapp_operator_resources: 'https://github.com/hguerrero/tutorial-web-app-operator/archive/v{{ocp4_workload_dil_agile_integration_webapp_operator_release_tag}}.zip'
-    ocp4_workload_dil_agile_integration_webapp_operator_resource_items:
-      - rbac.yaml
-      - sa.yaml
-      - crd.yaml
-      - operator.yaml
-    ocp4_workload_dil_agile_integration_webapp_walkthrough_locations: 'https://github.com/GuilhermeCamposo/workshop_3scale.git'
+    # solution explorer
+    solution_explorer_client_id: tutorial-web-app
+    solution_explorer_image_tag: '1.0.10'
+    solution_explorer_image: 'quay.io/gcamposo/tutorial-web-app:{{ solution_explorer_image_tag }}'
+    solution_explorer_namespace: "workshop-solution-explorer"
+    solution_explorer_walkthrough_locations:
+      - 'https://github.com/GuilhermeCamposo/workshop_3scale.git'
+
+    # snapshot operator
     snapshot_operator_project: "openshift-marketplace"
   tasks:
 
@@ -51,14 +44,6 @@
         - token is not defined
         - num_users is not defined
         - num_users | int > 0
-
-    - name: Log in as super user with token on OpenShift 4
-      command: "oc login --token={{ token }}  --server={{ server }} --insecure-skip-tls-verify={{ insecure_skip_tls_verify }}"
-      when:
-       - token is defined
-       - token is not none
-       - token|trim() != ""
-      ignore_errors: no
 
     - name: usercount debug
       debug:
@@ -72,6 +57,9 @@
     # Figure out paths
     - name: Get openshift console
       k8s_info:
+        api_key: '{{ token }}'
+        host: '{{ server }}'
+        validate_certs: '{{ verify_tls }}'
         kind: Route
         name: console
         namespace: openshift-console
@@ -82,27 +70,17 @@
       set_fact:
         console_url: "https://{{ openshift_console_route.resources[0].status.ingress[0].host }}"
 
-    - name: Get ingress domain
-      k8s_info:
-        kind: IngressController
-        name: default
-        namespace: openshift-ingress-operator
-        api_version: operator.openshift.io/v1
-      register: openshift_ingress_controller
-
-    - name: Set openshift domain
+    - name: Define domain
       set_fact:
-        route_subdomain: "{{ openshift_ingress_controller.resources[0].status.domain }}"
+        domain : "{{ server | regex_replace('https://api.') | regex_replace(':6443') }}"
+
+    - name: Set Subdomain
+      set_fact:
+        route_subdomain: "apps.{{ domain }}"
 
     - name: Include Snapshot Operator
       include_role:
         name: snapshot
-
-    - name: Provision User Registration
-      include_role:
-        name: registration
-      vars:
-        registration_namespace: "registration"
 
     - name: Provision OpenShift Container Storage
       include_role:
@@ -140,11 +118,16 @@
       include_role:
         name: backend
       vars:
+        POSTGRESQL_USER: dbuser
+        POSTGRESQL_PASSWORD: password
+        POSTGRESQL_DATABASE: sampledb
+        POSTGRESQL_VERSION: latest
         backend_project: "international"
         sso_project: "sso"
 
-    - name: Import Deprecated Nodejs:12 Image
-      command: oc import-image nodejs-12:1-114 --from=registry.redhat.io/rhel8/nodejs-12:1-114 --confirm -n openshift
+    - name: Include import-image
+      include_role:
+        name: import-image
 
     - name: Provision User Namespaces
       include_role:
@@ -168,11 +151,17 @@
         fuse_project: "fuse"
         sso_project: "sso"
 
+    - name: Provision User Registration
+      include_role:
+        name: registration
+      vars:
+        registration_namespace: "registration"
+
     - name: Installation Finished
       debug:
         msg:
           - Installation finished succesfully.
           - 'Registration Page: https://{{ registration_url }} '
-          - 'Users` Password: {{ ocp4_workload_dil_agile_integration_user_access_token }} '
+          - 'Users` Password: {{ ocp4_workload_dil_agile_integration_openshift_user_password }} '
           - 'Registration Page for Admins: https://{{ registration_url }}/admin '
           - 'Admin Password: {{ workshop_admin_password }} '

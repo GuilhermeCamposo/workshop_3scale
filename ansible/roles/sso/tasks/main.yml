@@ -1,8 +1,8 @@
----
-# Use the SSO Operator to Install Apicurito
-
-- name: Evaluate {{sso_project }} namespace if not exists
+- name: Evaluate {{sso_project }} namespace
   k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     api_version: v1
     kind: Namespace
     name: '{{ sso_project }}'
@@ -10,16 +10,25 @@
 
 - name: Evaluate SSO Operator Group
   k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     state: present
     resource_definition: "{{ lookup('template', 'sso-operatorgroup.yaml.j2') }}"
 
 - name: Evaluate SSO Subscription
   k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     state: present
     resource_definition: "{{ lookup('template', 'sso-subscription.yaml.j2') }}"
 
 - name: Wait for SSO operator to install
   k8s_info:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     api_version: apiextensions.k8s.io/v1
     kind: CustomResourceDefinition
     name: keycloaks.keycloak.org
@@ -30,6 +39,9 @@
 
 - name: Evaluate the SSO Instance CR
   k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     state: present
     resource_definition:  "{{ lookup('template', 'sso-instance.yaml.j2') }}"
 
@@ -42,16 +54,15 @@
   retries: 90
   delay: 30
 
-- pause:
-    minutes: 2
-
 - name: Retrieve SSO admin credentials
   k8s_info:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
     kind: secret
     name: credential-sso
     namespace: '{{sso_project}}'
   register: _sso_credentials
-
 
 - set_fact:
     _sso_admin_user: '{{ _sso_credentials.resources[0].data.ADMIN_USERNAME | b64decode }}'
