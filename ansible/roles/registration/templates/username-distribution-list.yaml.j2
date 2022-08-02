@@ -37,7 +37,7 @@ spec:
               protocol: TCP
           env:
             - name: LAB_ADMIN_PASS
-              value: {{ workshop_admin_password }}
+              value: {{ registration_admin_password }}
             - name: LAB_DURATION_HOURS
               value: '1week'
             - name: LAB_EXTRA_URLS
@@ -49,15 +49,15 @@ spec:
             - name: LAB_REDIS_PASS
               value: redis
             - name: LAB_TITLE
-              value: {{ workshop_title }}
+              value: {{ registration_title }}
             - name: LAB_USER_ACCESS_TOKEN
-              value: {{ workshop_openshift_user_password }}
+              value: {{ registration_user_password }}
             - name: LAB_USER_COUNT
               value: '{{ participants }}'
             - name: LAB_USER_PAD_ZERO
               value: 'false'
             - name: LAB_USER_PASS
-              value: {{ workshop_openshift_user_password }}
+              value: {{ ocp4_workload_dil_agile_integration_openshift_user_password }}
             - name: LAB_USER_PREFIX
               value: user
           terminationMessagePath: /dev/termination-log

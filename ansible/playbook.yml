@@ -4,10 +4,7 @@
     # generic
     become_override: no
     ocp_username: opentlc-mgr
-    silent: false
-    insecure_skip_tls_verify: true
     verify_tls: false
-
     participants: '{{ num_users }}'
 
     # role
@@ -21,9 +18,9 @@
     ocp4_workload_dil_agile_integration_oauthclient_secret: '3scaleclientsecret'
 
     #  registration
-    workshop_title: "3scale Workshop"
-    workshop_openshift_user_password: "3scale"
-    workshop_admin_password: admin123
+    registration_title: "3scale Workshop"
+    registration_user_password: "3scale"
+    registration_admin_password: admin123
 
     # solution explorer
     solution_explorer_client_id: tutorial-web-app
@@ -162,6 +159,6 @@
         msg:
           - Installation finished succesfully.
           - 'Registration Page: https://{{ registration_url }} '
-          - 'Users` Password: {{ ocp4_workload_dil_agile_integration_openshift_user_password }} '
+          - 'Registration Users` Password: {{ registration_user_password }} '
           - 'Registration Page for Admins: https://{{ registration_url }}/admin '
-          - 'Admin Password: {{ workshop_admin_password }} '
+          - 'Registration Admin Password: {{ registration_admin_password }} '
