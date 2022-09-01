@@ -261,6 +261,7 @@ Did you get a response like in the example?
 [id="summary"]
 == Summary
 
-We reached the end of our workshop. It was a pleasure to have you with us. This was just a taste of what 3scale can do. We hope that this content will get you started on our API Management tool.
+You finished Lab 7. In this lab you learned:
 
-See you soon!
+. How to provide access to an external 3scale gateway
+. How to deploy a gateway on OpenShift using the APIcast Operator

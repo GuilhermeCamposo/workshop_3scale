@@ -101,7 +101,7 @@
     state: present
     resource_definition: "{{ lookup('template', 'threescale-oauthclient.yaml.j2') }}"
 
-- name: Provision 3scale ConfigMap
+- name: Enable 3scale Service Discovery
   k8s:
     api_key: '{{ token }}'
     host: '{{ server }}'

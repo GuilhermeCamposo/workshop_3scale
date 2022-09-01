@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: www
-          image: image-registry.openshift-image-registry.svc:5000/user1/www@sha256:476e0b91fbe2bb0d1b31da7672f5711394a6b786ea15f6aaef5c611f7d849fd1
+          image: image-registry.openshift-image-registry.svc:5000/user{{ item }}/www:latest
           ports:
             - containerPort: 8080
               protocol: TCP
