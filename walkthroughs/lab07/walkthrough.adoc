@@ -167,7 +167,7 @@ image::images/yaml-view.png[Yaml View, role="integr8ly-img-responsive"]
 
 {empty} +
 
-* Paste the following definition in the YAML input field:
+* Paste the following definition in the YAML input field. Remember to replace `enabledServices` with the ID you saw in the previous section:
 
 {empty} +
 
@@ -196,7 +196,7 @@ spec:
 {empty} +
 
 * Click on `Create`
-* After the deployment in done you should be able to visualize the gateway pod and it's route
+* After the deployment is done you should be able to visualize the gateway pod and it's route
 
 {empty} +
 
@@ -216,7 +216,7 @@ Before testing our gateway deployment we need to configure our API to exposed by
 * In the products list, select `API`
 * In the `Integration` category, click on `Settings`
 * Under `Deployments`, select `APIcast self-managed`
-* Enter {3scale-gateway} as the `Staging Public Base URL`
+* Enter *https://{3scale-gateway}* as the `Staging Public Base URL`
 
 {empty} +
 

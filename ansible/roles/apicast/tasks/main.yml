@@ -6,12 +6,12 @@
     state: present
     kind: Subscription
     api_version: operators.coreos.com/v1alpha1
-    namespace: '{{ namespace }}'
+    namespace: openshift-operators
     definition:
       metadata:
         name: apicast-operator
       spec:
-        channel: threescale-2.11
+        channel: threescale-2.12
         installPlanApproval: Automatic
         name: apicast-operator
         source: redhat-operators
@@ -24,7 +24,7 @@
     validate_certs: '{{ verify_tls }}'
     api_version: v1
     kind: Pod
-    namespace: '{{ namespace }}'
+    namespace: openshift-operators
     label_selectors:
       - app = apicast
       - control-plane = controller-manager

@@ -139,6 +139,10 @@
       vars:
         registration_namespace: "registration"
 
+    - name: Include APIcast
+      include_role:
+        name: apicast
+
     - name: Installation Finished
       debug:
         msg:

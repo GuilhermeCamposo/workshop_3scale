@@ -83,8 +83,8 @@
         targetNamespaces:
         - 'user{{ item }}'
 
-- name: Include APIcast
-  include_role:
-    name: apicast
-  vars:
-    namespace: 'user{{ item }}'
+# - name: Include APIcast
+#   include_role:
+#     name: apicast
+#   vars:
+#     namespace: 'user{{ item }}'
