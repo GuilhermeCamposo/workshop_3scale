@@ -113,6 +113,8 @@ image::images/services.png[Services, role="integr8ly-img-responsive"]
 
 * We need to add the following annotations and label to the object:
 
+{empty} +
+
 ----
 metadata:
   annotations:
@@ -123,6 +125,8 @@ metadata:
  labels:
     discovery.3scale.net: "true"
 ----
+
+{empty} +
 
 * The final object should look like the following. Do not forget to click on `Save` after you are done with your modifications.
 
