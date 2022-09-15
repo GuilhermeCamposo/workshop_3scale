@@ -41,7 +41,7 @@ Your password is: `{user-password}`
 ****
 
 [time=6]
-[id="provider-key"]
+[id="example-service"]
 == Deploying an example service
 
 We need a REST service deployed on OpenShift before using 3scale to scan the cluster and find that service. Since 3scale is going to use the user permissions to scan the cluster,
@@ -141,7 +141,7 @@ image::images/annotations.png[annotations and labels, role="integr8ly-img-respon
 Did you update the service?
 
 [time=6]
-[id="provider-key"]
+[id="discovering-apis"]
 == Discovering APIs with 3scale
 
 * Start by accessing link:{3scale-admin-url}[3scale Admin Console, window="_blank"]
@@ -190,7 +190,7 @@ image::images/created.png[Product and Backend created, role="integr8ly-img-respo
 Are you seeing the Product and Backend?
 
 [time=5]
-[id="provider-key"]
+[id="testing-api"]
 == Testing the API
 
 Let's see how to test our newly created API Product.

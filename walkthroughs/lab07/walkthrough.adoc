@@ -106,7 +106,7 @@ image::images/secret-values.png[Secrets Overview, role="integr8ly-img-responsive
 Did you create the secret?
 
 [time=3]
-[id="secret"]
+[id="exposing-echo"]
 == Exposing ECHO API
 
 Echo API is a 3scale cloud hosted API that comes pre-configured with 3scale to demonstrate how to perform basic configuration.
