@@ -1,0 +1,7 @@
+- hosts: localhost
+  name: Install 3scale Workshop
+  vars:
+  tasks:
+    - name: Provision Workshop
+      include_role:
+        name: ocp4-workload-3scale-workshop
