@@ -31,6 +31,16 @@
 
 - name: Uninstall Threescale
   block:
+    - name: Delete Tenant
+      k8s:
+        state: absent
+        api_version: capabilities.3scale.net/v1alpha1
+        kind: Tenant
+        name: 'user{{ item }}-tenant'
+        namespace: '{{ threescale_project }}'
+      loop: "{{ range(1, num_users|int + 1, 1)|list }}"
+      when:
+        - num_users|int > 0
     - name: Delete subscription
       k8s:
         state: absent
