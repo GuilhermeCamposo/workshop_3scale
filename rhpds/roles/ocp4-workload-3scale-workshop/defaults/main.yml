@@ -5,6 +5,7 @@ verify_tls: false
 
 # role
 workshop_ocp_user_password: 'openshift'
+silent: false
 
 # 3scale
 threescale_oauthclient_secret: '3scaleclientsecret'
